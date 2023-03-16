@@ -27,6 +27,6 @@ export const assignorReducer = createReducer(initialState, (builder) => {
     .addCase(getFail, (state, action) => {
       state.getLoading = false;
       state.getError = action.payload;
-      state.error = action.payload.response.data.message;
+      state.error = action.payload;
     });
 });

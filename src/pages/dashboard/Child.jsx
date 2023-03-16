@@ -7,6 +7,8 @@ import axios from "axios";
 import { BASE_URL } from "../../constants/config";
 import Header from "../../components/Header";
 import { tokens } from "../../constants/theme";
+import { useNavigate } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
 
 const Child = () => {
   const dispatch = useDispatch();
@@ -23,9 +25,18 @@ const Child = () => {
     { title: "Name", field: "name" },
     { title: "Age", field: "age" },
     { title: "Gender", field: "gender" },
-
     { title: "Color", field: "color" },
-    { title: "Description", field: "description" },
+    {
+      title: "Description",
+      field: "description",
+      cellStyle: {
+        width: 20,
+        maxWidth: 100,
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      },
+    },
     { title: "Username", field: "userName" },
     { title: "Parent ID", field: "parentId", editable: false },
   ];
@@ -39,7 +50,10 @@ const Child = () => {
 
   const { assignee } = useSelector((state) => state.ass);
 
+  const [deleted, setdeleted] = useState(false);
+
   const DeleteAssignee = (id) => {
+    setdeleted(false);
     let token = localStorage.getItem("token");
     axios
       .delete(`${BASE_URL}/deleteChild?childId=${id}`, {
@@ -49,15 +63,34 @@ const Child = () => {
       })
       .then((res) => {
         console.log(res.data);
+        setdeleted(true);
       })
       .catch((e) => {
         console.log(`delete error ${e}`);
+        setdeleted(false);
       });
   };
 
+  const handleDeleteRow = (oldData) =>
+    new Promise((resolve, reject) => {
+      dispatch(DeleteAssignee(oldData.id));
+      if (deleted) {
+        resolve();
+        dispatch(getAssignee());
+      } else {
+        reject();
+      }
+    });
+
+  const navigate = useNavigate();
+  const handleChange = () => {
+    navigate("/form/child");
+  };
+
   return (
-    <Box m="20px" sx={{ ml: "42px", mr: "42px" }}>
-      <Header title="Assignors" subtitle="Parents" />
+    <Box m="18px" sx={{ pb: "20px", ml: "42px", mr: "0px" }}>
+      <Header title="Assignees" subtitle="Children" />
+
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -91,59 +124,53 @@ const Child = () => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <ThemeProvider theme={defaultMaterialTheme}>
-          <MaterialTable
-            title="Assignor Data"
-            data={
-              assignee
-                ? Object.values(assignee)?.map((val) => ({ ...val }))
-                : []
-            }
-            columns={columns}
-            editable={{
-              onRowAdd: (newRow) =>
-                new Promise((resolve, reject) => {
-                  console.log(newRow);
-                  dispatch();
-                  setTimeout(() => {
-                    dispatch(getAssignee());
-                    resolve();
-                  }, 2000);
-                }),
-              onRowDelete: (selectedRow) =>
-                new Promise((resolve, reject) => {
-                  dispatch(DeleteAssignee(selectedRow.id));
-                  setTimeout(() => {
-                    dispatch(getAssignee());
-                    resolve();
-                  }, 2000);
-                }),
-              onRowUpdate: (updatedRow, oldRow) =>
-                new Promise((resolve, reject) => {
-                  console.log(updatedRow);
-                  dispatch(
-                    updateAssignee(
-                      updatedRow.name,
-                      updatedRow.age,
-                      updatedRow.gender,
-                      updatedRow.color,
-                      updatedRow.description,
-                      updatedRow.url,
-                      updatedRow.id
-                    )
-                  );
-                  setTimeout(() => {
-                    dispatch(getAssignee());
-                    resolve();
-                  }, 2000);
-                }),
-            }}
-            options={{
-              actionsColumnIndex: -1,
-              addRowPosition: "first",
-            }}
-          />
-        </ThemeProvider>
+
+        <MaterialTable
+          title="Assignee Data"
+          data={
+            assignee ? Object.values(assignee)?.map((val) => ({ ...val })) : []
+          }
+          columns={columns}
+          editable={{
+            onRowAdd: null,
+            onRowDelete: handleDeleteRow,
+            onRowUpdate: (updatedRow, oldRow) =>
+              new Promise((resolve, reject) => {
+                console.log(updatedRow);
+                dispatch(
+                  updateAssignee(
+                    updatedRow.name,
+                    updatedRow.age,
+                    updatedRow.gender,
+                    updatedRow.color,
+                    updatedRow.description,
+                    updatedRow.url,
+                    updatedRow.id
+                  )
+                );
+                setTimeout(() => {
+                  dispatch(getAssignee());
+                  resolve();
+                }, 2000);
+              }),
+          }}
+          options={{
+            actionsColumnIndex: -1,
+            addRowPosition: "first",
+            sorting: true,
+            defaultSort: "asc",
+          }}
+          actions={[
+            {
+              icon: () => <AddIcon />,
+              tooltip: "Add assignee",
+              onClick: handleChange,
+              isFreeAction: true,
+            },
+          ]}
+          style={{ width: "95%" }}
+          addRowPosition="never"
+        />
       </Box>
     </Box>
   );

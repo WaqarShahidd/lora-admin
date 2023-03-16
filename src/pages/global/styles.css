@@ -1,0 +1,150 @@
+.grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100vh;
+  background-image: url(../../assets/Frame\ 30.png),
+    linear-gradient(180deg, #0001e0 0%, #db0adf 100%);
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100%, contain;
+}
+
+.grid .child1 {
+  margin: 2rem 0rem 2rem 9rem;
+}
+
+.grid .child1 div {
+  margin-top: 5rem;
+  color: #fff;
+}
+
+.grid .child1 div h1 {
+  font-family: "wrchivo";
+  font-size: 4.5vw;
+  font-weight: bolder;
+}
+
+.grid .child1 div p {
+  /* margin-top: 1rem;
+    font-weight: 800;
+    font-size: 0.8em;
+    line-height: 1.5em; */
+
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5em;
+}
+
+.grid .child1 #signup {
+  color: #fff;
+  margin-top: 0.5rem;
+  border: 2px solid #ffffff;
+  background: none;
+  border-radius: 22px;
+  padding: 0.8rem 3rem 0.8rem 3rem;
+}
+
+.grid .child1 #signup:hover {
+  background-color: #0001fc;
+  border-color: #0001fc;
+  transition: 0.3s;
+}
+
+.grid .child2 {
+  position: relative;
+  padding: 2rem 4rem 2rem 4rem;
+  background-color: #fff;
+  border-radius: 30px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.grid .child2 h1 {
+  margin-top: 2rem;
+  font-weight: bold;
+  color: #04031c;
+  font-family: "wrchivo";
+}
+
+.grid .child2 p {
+  font-size: 0.8em;
+  margin-top: 0.5rem;
+  color: #81818d;
+  line-height: 1.5em;
+}
+
+.grid .child2 #email {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  background-color: #edf1f4;
+  outline: none;
+}
+
+.grid ::placeholder {
+  font-size: 0.8em;
+}
+
+.grid .child2 .psswrd {
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  margin-top: 1rem;
+  background-color: #edf1f4;
+  width: 100%;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid #child2 h1 {
+  margin-top: -1rem;
+}
+
+.grid #child2 #signin {
+  margin-top: 3rem;
+}
+
+.grid .psswrd span i {
+  font-size: 1em;
+  color: #81818d;
+  cursor: pointer;
+  user-select: none;
+}
+
+.grid .child2 #password {
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.grid .child2 #password1 {
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.grid .child2 #trouble {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  align-self: flex-start;
+  color: #81818d;
+  font-size: 0.7em;
+  cursor: pointer;
+}

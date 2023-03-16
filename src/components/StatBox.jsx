@@ -21,13 +21,17 @@ const StatBox = ({ title, value, increase, icon, description }) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" sx={{ color: "#fff6e0" }}>
+        <Typography variant="h4" sx={{ color: "#fff6e0" }}>
           {title}
         </Typography>
         {icon}
       </Box>
 
-      <Typography variant="h3" fontWeight="600" sx={{ color: "#ffedc2" }}>
+      <Typography
+        variant="h3"
+        fontWeight="600"
+        sx={{ color: "#997d3d", fontStyle: "italic" }}
+      >
         {value}
       </Typography>
       <Box

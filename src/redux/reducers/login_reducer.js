@@ -23,7 +23,7 @@ export const loginReducer = createReducer(initialState, (builder) => {
     .addCase(success, (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
-      state.loginData = action.payload.parent;
+      state.loginData = action.payload.admin;
       state.token = action.payload.token;
       state.error = null;
     })
@@ -50,5 +50,6 @@ export const loginReducer = createReducer(initialState, (builder) => {
     .addCase(logoutFail, (state, action) => {
       state.logoutLoading = false;
       state.loginerror = true;
+      state.isAuthenticated = false;
     });
 });

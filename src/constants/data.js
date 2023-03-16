@@ -156,3 +156,132 @@ export const t = {
   title: "Username",
   field: "username",
 };
+
+export const taskTypeDropDown = [
+  { id: "1", type: "Task List" },
+  { id: "2", type: "Schedule" },
+  { id: "3", type: "Grocery List" },
+];
+
+export const tasks = [
+  {
+    id: "1",
+    type: "Task List",
+    task: "Fix bed",
+  },
+  {
+    id: "2",
+    type: "Task List",
+    task: "Fold blankets",
+  },
+  {
+    id: "3",
+    type: "Task List",
+    task: "Laundry",
+  },
+  {
+    id: "4",
+    type: "Task List",
+    task: "Sweep",
+  },
+  {
+    id: "5",
+    type: "Task List",
+    task: "Mop",
+  },
+  {
+    id: "6",
+    type: "Task List",
+    task: "Clean Playroom",
+  },
+  {
+    id: "7",
+    type: "Task List",
+    task: "Feed dog",
+  },
+  {
+    id: "8",
+    type: "Task List",
+    task: "Cut grass",
+  },
+  {
+    id: "9",
+    type: "Task List",
+    task: "Wash dishes",
+  },
+  {
+    id: "10",
+    type: "Task List",
+    task: "Put up groceries",
+  },
+  {
+    id: "11",
+    type: "Task List",
+    task: "Other",
+  },
+  {
+    id: "12",
+    type: "Schedule",
+    task: "Grocery Store",
+  },
+  {
+    id: "13",
+    type: "Schedule",
+    task: "Post Office",
+  },
+  {
+    id: "14",
+    type: "Schedule",
+    task: "Lunch",
+  },
+  {
+    id: "15",
+    type: "Schedule",
+    task: "Park",
+  },
+  {
+    id: "16",
+    type: "Schedule",
+    task: "Cleaners",
+  },
+  {
+    id: "17",
+    type: "Schedule",
+    task: "Movies",
+  },
+  {
+    id: "18",
+    type: "Schedule",
+    task: "Other",
+  },
+  {
+    id: "19",
+    type: "Grocery List",
+    task: "Tomatoes",
+  },
+  {
+    id: "20",
+    type: "Grocery List",
+    task: "Bread",
+  },
+  {
+    id: "21",
+    type: "Grocery List",
+    task: "Ham",
+  },
+  {
+    id: "22",
+    type: "Grocery List",
+    task: "Toilet paper",
+  },
+  {
+    id: "23",
+    type: "Grocery List",
+    task: "Dog food",
+  },
+  {
+    id: "24",
+    type: "Grocery List",
+    task: "Other",
+  },
+];

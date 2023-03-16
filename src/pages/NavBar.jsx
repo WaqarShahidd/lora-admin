@@ -7,7 +7,6 @@ import {
   SettingsOutlined,
   ArrowDropDownOutlined,
 } from "@mui/icons-material";
-
 import {
   AppBar,
   Button,
@@ -29,131 +28,25 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const isOpen = Boolean(anchorEl);
+  const open = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => {
     setAnchorEl(null);
-    dispatch(logout());
   };
 
   const { loginData } = useSelector((state) => state.log);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+
   return (
-    // <AppBar
-    //   sx={{
-    //     position: "static",
-    //     background: "none",
-    //     boxShadow: "none",
-    //   }}
-    //   style={{ padding: "10px 5px" }}
-    // >
-    //   <Toolbar sx={{ justifyContent: "space-between" }}>
-    //     {/* LEFT SIDE */}
-    //     <Box
-    //       style={{
-    //         display: "flex",
-    //         justifyContent: "space-between",
-    //         alignItems: "center",
-    //       }}
-    //     >
-    //       <IconButton
-    //         onClick={() => {
-    //           setIsSidebarOpen(!isSidebarOpen);
-    //         }}
-    //         style={{ marginRight: "15px" }}
-    //       >
-    //         <MenuIcon />
-    //       </IconButton>
-    //       <Box
-    //         style={{
-    //           display: "flex",
-    //           justifyContent: "space-between",
-    //           alignItems: "center",
-    //         }}
-    //         backgroundColor={"#F0F0F0"}
-    //         borderRadius="9px"
-    //         gap="3rem"
-    //         p="0.1rem 1.5rem"
-    //       >
-    //         <InputBase placeholder="Search..." />
-    //         <IconButton onClick={() => console.log(loginData)}>
-    //           <Search />
-    //         </IconButton>
-    //       </Box>
-    //     </Box>
-
-    //     {/* RIGHT SIDE */}
-    //     <Box
-    //       style={{
-    //         display: "flex",
-    //         justifyContent: "space-between",
-    //         alignItems: "center",
-    //       }}
-    //     >
-    //       <IconButton>
-    //         <SettingsOutlined sx={{ fontSize: "25px" }} />
-    //       </IconButton>
-
-    //       <Box
-    //         style={{
-    //           display: "flex",
-    //           justifyContent: "space-between",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         <Button
-    //           onClick={handleClick}
-    //           sx={{
-    //             display: "flex",
-    //             justifyContent: "space-between",
-    //             alignItems: "center",
-    //             textTransform: "none",
-    //             gap: "1rem",
-    //           }}
-    //         >
-    //           <Box
-    //             component="img"
-    //             alt="profile"
-    //             src={require("../assets/hero1.png")}
-    //             height="32px"
-    //             width="32px"
-    //             borderRadius="50%"
-    //             sx={{ objectFit: "cover" }}
-    //           />
-    //           <Box textAlign="left">
-    //             <Typography
-    //               fontWeight="bold"
-    //               fontSize="0.85rem"
-    //               sx={{ color: "#000" }}
-    //             >
-    //               User
-    //             </Typography>
-    //             <Typography fontSize="0.75rem" sx={{ color: "#000" }}>
-    //               Software
-    //             </Typography>
-    //           </Box>
-    //           <ArrowDropDownOutlined sx={{ color: "#000", fontSize: "25px" }} />
-    //         </Button>
-    //         <Menu
-    //           anchorEl={anchorEl}
-    //           open={isOpen}
-    //           onClose={handleClose}
-    //           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-    //         >
-    //           <MenuItem onClick={handleClose}>Log Out</MenuItem>
-    //         </Menu>
-    //       </Box>
-    //     </Box>
-    //   </Toolbar>
-    // </AppBar>
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box display="flex" justifyContent="space-between" p={2} mr={2.5}>
       <Box display="flex" borderRadius="3px">
         <IconButton
           sx={{ ml: 2, flex: 1 }}
@@ -187,10 +80,31 @@ const NavBar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handleClick}>
           <PersonOutlinedIcon />
         </IconButton>
       </Box>
+
+      {/* Menu */}
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            dispatch(logout());
+            navigate("/login");
+            setAnchorEl(null);
+          }}
+        >
+          Logout
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };

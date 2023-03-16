@@ -10,6 +10,7 @@ import Login from "./pages/dashboard/Login";
 import { ColorModeContext, useMode } from "./constants/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Test from "./pages/dashboard/Test";
+import AddForm from "./pages/dashboard/AddForm";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -22,13 +23,14 @@ function App() {
           {/* <Sidebar /> */}
           <Routes>
             <Route path="/login" element={<Login />} />
+            {/* <Route path="/test" element={<Test />} /> */}
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/parent" element={<Parents />} />
+              <Route path="/assignors" element={<Parents />} />
               <Route path="/task" element={<Task />} />
-              <Route path="/child" element={<Child />} />
-              <Route path="/test" element={<Test />} />
+              <Route path="/assignees" element={<Child />} />
+              <Route path="/form/:id" element={<AddForm />} />
             </Route>
           </Routes>
         </Router>

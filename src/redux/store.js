@@ -21,6 +21,10 @@ const store = configureStore({
     ass: assigneeReducer,
     task: taskReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

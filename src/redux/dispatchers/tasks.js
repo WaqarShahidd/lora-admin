@@ -32,8 +32,8 @@ export const createTask =
           timeAllowed: timeAllowed,
           assignedToId: assignedToId,
           description: desc,
-          date: date,
-          month: month,
+          date: moment(startDate).format("MM-DD-YYYY"),
+          month: moment(startDate).format("MMM"),
         },
         {
           headers: {

@@ -50,6 +50,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Link } from "react-router-dom";
+import AddForm from "../dashboard/AddForm";
 
 const navItems = [
   {
@@ -57,11 +58,11 @@ const navItems = [
     icon: <Dashboard />,
   },
   {
-    text: "Parent",
+    text: "Assignors",
     icon: <Parents />,
   },
   {
-    text: "Child",
+    text: "Assignees",
     icon: <Child />,
   },
   {
@@ -170,32 +171,28 @@ const Sidebar = ({
             </Box>
             <List style={{ padding: "10px" }}>
               {navItems.map(({ text, icon }) => {
-                // if (!icon) {
-                //   return (
-                //     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
-                //       {text}
-                //     </Typography>
-                //   );
-                // }
                 const lcText = text.toLowerCase();
-
                 return (
-                  <ListItem key={text} disablePadding>
+                  <ListItem
+                    key={text}
+                    disablePadding
+                    style={{
+                      color: colors.grey[100],
+                    }}
+                  >
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
+                        if (lcText === "form") {
+                          navigate(`/${lcText}/parent`);
+                        } else {
+                          navigate(`/${lcText}`);
+                        }
                         setActive(lcText);
                       }}
                       sx={{
                         backgroundColor:
                           active === lcText ? "#ffe3a3" : "transparent",
                         color: active === lcText ? "#191F45" : "#fff6e0",
-                        "& .MuiListItemButton-root:hover": {
-                          bgcolor: "transparent",
-                          "&, & .MuiListItemIcon-root": {
-                            color: "black",
-                          },
-                        },
                       }}
                     >
                       {/* <ListItemIcon sx={{

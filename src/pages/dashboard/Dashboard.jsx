@@ -1,26 +1,19 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Tooltip,
-  useMediaQuery,
-} from "@mui/material";
-import {
-  Delete,
-  Edit,
-  Preview,
-  DownloadOutlined,
-  Email,
-  PointOfSale,
-  PersonAdd,
-  Traffic,
-} from "@mui/icons-material";
+import { Box, IconButton, Tooltip, useMediaQuery } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
 import React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { customer } from "../../constants/data";
 import Header from "../../components/Header";
 import StatBox from "../../components/StatBox";
+import { useDispatch } from "react-redux";
+import { getAssignor } from "../../redux/dispatchers/assignor";
+import { getAssignee } from "../../redux/dispatchers/assignee";
+import { getTask } from "../../redux/dispatchers/tasks";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { logout } from "../../redux/dispatchers/login";
+import { useNavigate } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person";
+import PeopleIcon from "@mui/icons-material/People";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 const Actions = () => {
   return (
@@ -40,87 +33,25 @@ const Actions = () => {
 };
 
 const Dashboard = () => {
-  const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "firstName",
-      headerName: "First name",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "lastName",
-      headerName: "Last name",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 110,
-      editable: true,
-    },
-    {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-    },
-    {
-      field: "actions",
-      headerName: "Actions",
-      type: "actions",
-      width: 150,
-      renderCell: (params) => <Actions {...{ params }} />,
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  useEffect(() => {
+    dispatch(getAssignor());
+    dispatch(getAssignee());
+    dispatch(getTask());
+  }, []);
 
-  // const handleUpdateRow = () => {
-  //   setRows((prevRows) => {
-  //     const rowToUpdateIndex = randomInt(0, rows.length - 1);
+  const { assignor } = useSelector((state) => state.assignor);
+  const { assignee } = useSelector((state) => state.ass);
+  const { taskData } = useSelector((state) => state.task);
 
-  //     return prevRows.map((row, index) =>
-  //       index === rowToUpdateIndex ? { ...row, username: randomUserName() } : row,
-  //     );
-  //   });
-  // };
-
-  // const handleUpdateAllRows = () => {
-  //   setRows(rows.map((row) => ({ ...row, username: randomUserName() })));
-  // };
-
-  // const handleDeleteRow = () => {
-  //   setRows((prevRows) => {
-  //     const rowToDeleteIndex = randomInt(0, prevRows.length - 1);
-  //     return [
-  //       ...rows.slice(0, rowToDeleteIndex),
-  //       ...rows.slice(rowToDeleteIndex + 1),
-  //     ];
-  //   });
-  // };
-
-  //   const handleAddRow = () => {
-  //     setRows((prevRows) => [
-  //       ...prevRows,
-  //       { id: "", lastName: "", firstName: "", age: "" },
-  //     ]);
-  //   };
+  // useEffect(() => {
+  //   if (error?.message === "Request failed with status code 500") {
+  //     dispatch(dispatch(logout()));
+  //     navigate("/login");
+  //   }
+  // }, [error]);
 
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
@@ -149,17 +80,16 @@ const Dashboard = () => {
         {/* ROW 1 */}
         <StatBox
           title="Total Assignors"
-          value={8}
-          increase="+14%"
-          description="Since last month"
-          icon={<Email sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
+          value={assignor?.length}
+          // increase="+14%"
+
+          icon={<PersonIcon sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
         />
         <StatBox
           title="Total Assignees"
-          value={10}
-          increase="+21%"
-          description="Since last month"
-          icon={<PointOfSale sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
+          value={assignee?.length}
+          // increase="+21%"
+          icon={<PeopleIcon sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
         />
         {/* <Box
           gridColumn="span 8"
@@ -171,18 +101,10 @@ const Dashboard = () => {
           <OverviewChart view="sales" isDashboard={true} />
         </Box> */}
         <StatBox
-          title="Monthly Sales"
-          value={200}
-          increase="+5%"
-          description="Since last month"
-          icon={<PersonAdd sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
-        />
-        <StatBox
-          title="Yearly Sales"
-          value={800}
-          increase="+43%"
-          description="Since last month"
-          icon={<Traffic sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
+          title="Total Task"
+          value={taskData?.length}
+          // increase="+5%"
+          icon={<TaskAltIcon sx={{ color: "#ffe3a3", fontSize: "26px" }} />}
         />
 
         {/* ROW 2 */}

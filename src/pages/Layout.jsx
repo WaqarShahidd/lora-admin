@@ -12,7 +12,7 @@ const Layout = () => {
   const { isAuthenticated } = useSelector((state) => state.log);
   const token = localStorage.getItem("token");
 
-  return token === undefined ? (
+  return token === null ? (
     <Navigate to="/login" />
   ) : (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
