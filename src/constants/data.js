@@ -285,3 +285,11 @@ export const tasks = [
     task: "Other",
   },
 ];
+
+export const securityQuestions = [
+  { id: 1, question: "What is your mother's maiden name?" },
+  { id: 2, question: "What is the name of your first pet?" },
+  { id: 3, question: "What was your first car?" },
+  { id: 4, question: "What elementary school did you attend?" },
+  { id: 5, question: "What is the name of the town where you were born?" },
+];

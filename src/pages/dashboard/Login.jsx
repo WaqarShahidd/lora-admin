@@ -10,8 +10,10 @@ import {
   useMediaQuery,
   useTheme,
   Grid,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Visibility from "@mui/icons-material/Visibility";
@@ -23,6 +25,7 @@ import { login } from "../../redux/dispatchers/login";
 import { useNavigate } from "react-router-dom";
 import { tokens } from "../../constants/theme";
 import { themeP } from "../global/themeP";
+import { securityQuestions } from "../../constants/data";
 
 const checkoutSchema = yup.object().shape({
   email: yup.string().required("required"),
@@ -40,7 +43,9 @@ const Login = () => {
   );
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const handleFormSubmit = (values) => {
-    dispatch(login(values.email, values.password));
+    dispatch(
+      login(values.email, values.password, securityQuestion, values.answer)
+    );
   };
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -52,6 +57,7 @@ const Login = () => {
   }, [isAuthenticated, loading]);
 
   const [showPassword, setShowPassword] = React.useState(false);
+  const [securityQuestion, setSecurityQuestion] = useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -200,7 +206,10 @@ const Login = () => {
                               },
                             }}
                           />
-                          <FormControl sx={{ width: "100%" }} variant="filled">
+                          <FormControl
+                            sx={{ width: "100%", marginBottom: "10px" }}
+                            variant="filled"
+                          >
                             <InputLabel htmlFor="filled-adornment-password">
                               Password
                             </InputLabel>
@@ -246,6 +255,63 @@ const Login = () => {
                               }
                             />
                           </FormControl>
+
+                          <Select
+                            value={securityQuestion}
+                            onChange={(e) =>
+                              setSecurityQuestion(e.target.value)
+                            }
+                            label="Security Question"
+                            sx={{
+                              width: "100%",
+                              padding: "0px",
+                              marginBottom: "10px",
+                              // backgroundColor: "#edf1f4",
+                              // borderRadius: "6px",
+                              // "& fieldset": { border: "none" },
+                            }}
+                            displayEmpty
+                            inputProps={{ "aria-label": "Without label" }}
+                          >
+                            <MenuItem
+                              value=""
+                              disabled
+                              style={{ color: "#757575" }}
+                            >
+                              <>Select security question</>
+                            </MenuItem>
+                            {securityQuestions.map((item) => (
+                              <MenuItem value={item.question}>
+                                {item.question}
+                              </MenuItem>
+                            ))}
+                          </Select>
+
+                          <TextField
+                            fullWidth
+                            variant="filled"
+                            type="text"
+                            label="Answer"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.answer}
+                            name="answer"
+                            error={!!touched.answer && !!errors.answer}
+                            helperText={touched.answer && errors.answer}
+                            sx={{
+                              width: "100%",
+                              marginBottom: "10px",
+                              "& .MuiInputLabel-root": {
+                                color: colors.primary[100],
+                              },
+                              "& .MuiInput-underline": {
+                                borderBottomColor: colors.primary[100],
+                              },
+                              "& .MuiInput-label": {
+                                color: "#f00",
+                              },
+                            }}
+                          />
                         </Box>
 
                         <Button

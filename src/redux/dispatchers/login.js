@@ -4,7 +4,7 @@ import { BASE_URL } from "../../constants/config";
 // Parent
 
 export const login =
-  (email = "", password = "") =>
+  (email = "", password = "", question = "", answer = "") =>
   async (dispatch) => {
     try {
       dispatch({
@@ -13,6 +13,8 @@ export const login =
       const { data } = await axios.post(`${BASE_URL}/login`, {
         email: email,
         password: password,
+        question: question,
+        answer: answer,
       });
       dispatch({
         type: "loginSuccess",
