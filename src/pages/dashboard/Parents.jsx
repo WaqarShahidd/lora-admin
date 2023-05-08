@@ -26,6 +26,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
 
 const ModalTable = ({ childrenData, parent }) => {
   const modalColumns = [
@@ -233,6 +235,38 @@ const Parents = () => {
   const [modalState, setmodalState] = useState(false);
   const [paymentModalState, setpaymentModalState] = useState(false);
 
+  const [deleted, setdeleted] = useState(false);
+
+  const DeleteAssignor = (id) => {
+    setdeleted(false);
+    let token = localStorage.getItem("token");
+    axios
+      .delete(`${BASE_URL}/deleteParent?parentId=${id}`, {
+        headers: {
+          Authorization: `token ${JSON.parse(token)}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setdeleted(true);
+      })
+      .catch((e) => {
+        console.log(`delete error ${e}`);
+        setdeleted(false);
+      });
+  };
+
+  const handleDeleteRow = (oldData) =>
+    new Promise((resolve, reject) => {
+      DeleteAssignor(oldData.id);
+      if (deleted) {
+        resolve();
+        dispatch(getAssignor());
+      } else {
+        reject();
+      }
+    });
+
   return (
     <Box m="20px" sx={{ ml: "42px", mr: "42px" }}>
       <Header title="Assignors" subtitle="Parents" />
@@ -287,7 +321,7 @@ const Parents = () => {
           columns={columns}
           editable={{
             onRowAdd: null,
-            onRowDelete: null,
+            onRowDelete: handleDeleteRow,
             onRowUpdate: (updatedRow, oldRow) =>
               new Promise((resolve, reject) => {
                 console.log(updatedRow);
