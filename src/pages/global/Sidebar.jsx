@@ -51,6 +51,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Link } from "react-router-dom";
 import AddForm from "../dashboard/AddForm";
+import Queries from "../dashboard/Queries";
 
 const navItems = [
   {
@@ -68,6 +69,10 @@ const navItems = [
   {
     text: "Task",
     icon: <Task />,
+  },
+  {
+    text: "Queries",
+    icon: <Queries />,
   },
 ];
 

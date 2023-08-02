@@ -11,6 +11,7 @@ import { ColorModeContext, useMode } from "./constants/theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Test from "./pages/dashboard/Test";
 import AddForm from "./pages/dashboard/AddForm";
+import Queries from "./pages/dashboard/Queries";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -31,6 +32,7 @@ function App() {
               <Route path="/task" element={<Task />} />
               <Route path="/assignees" element={<Child />} />
               <Route path="/form/:id" element={<AddForm />} />
+              <Route path="/queries" element={<Queries />} />
             </Route>
           </Routes>
         </Router>
