@@ -12,6 +12,11 @@ import {
   Grid,
   Select,
   MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
@@ -26,6 +31,9 @@ import { useNavigate } from "react-router-dom";
 import { tokens } from "../../constants/theme";
 import { themeP } from "../global/themeP";
 import { securityQuestions } from "../../constants/data";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import DoneIcon from "@mui/icons-material/Done";
 
 const checkoutSchema = yup.object().shape({
   email: yup.string().required("required"),
@@ -64,7 +72,18 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const token = localStorage.getItem("token");
+  const [value, setValue] = useState(false);
+
+  const OnSubmit = () => {
+    axios
+      .get(`${BASE_URL}/api/admin/ForgetPasswordEmail`, {})
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(`error ${e}`);
+      });
+  };
 
   return (
     <ThemeProvider theme={themeP}>
@@ -312,7 +331,87 @@ const Login = () => {
                               },
                             }}
                           />
+
+                          <Typography
+                            color="white"
+                            fontWeight="bold"
+                            mt={1}
+                            mb={1}
+                            sx={{
+                              textAlign: "left",
+                              textDecoration: "underline", // Add underline
+                              cursor: "pointer", // Add pointer cursor
+                            }}
+                            onClick={() => setValue(true)}
+                          >
+                            Forgot password?
+                          </Typography>
                         </Box>
+
+                        <Dialog
+                          open={value}
+                          onClose={() => setValue(false)}
+                          PaperProps={{
+                            sx: {
+                              width: "22.5%",
+                              height: "30%",
+                            },
+                          }}
+                        >
+                          <DialogTitle
+                            sx={{
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              paddingBottom: "5px",
+                            }}
+                          >
+                            Forgot password
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText sx={{ textAlign: "center" }}>
+                              Send a link to reset password on our email
+                            </DialogContentText>
+                          </DialogContent>
+
+                          <DialogActions
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Button
+                              sx={{
+                                backgroundColor: "green",
+                                color: "white",
+                                "&:hover": {
+                                  backgroundColor: "#329932",
+                                },
+                                width: "40%",
+                                borderRadius: "18px",
+                                marginBottom: "15px",
+                              }}
+                              onClick={OnSubmit}
+                            >
+                              Yes
+                            </Button>
+                            <Button
+                              sx={{
+                                backgroundColor: "red",
+                                color: "white",
+                                "&:hover": {
+                                  backgroundColor: "#329932",
+                                },
+                                width: "40%",
+                                borderRadius: "18px",
+                                marginBottom: "15px",
+                              }}
+                              onClick={() => setValue(false)}
+                            >
+                              No
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
 
                         <Button
                           type="submit"

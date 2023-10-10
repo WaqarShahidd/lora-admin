@@ -12,6 +12,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import Test from "./pages/dashboard/Test";
 import AddForm from "./pages/dashboard/AddForm";
 import Queries from "./pages/dashboard/Queries";
+import ResetPassword from "./pages/dashboard/ResetPassword";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -24,6 +25,10 @@ function App() {
           {/* <Sidebar /> */}
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route
+              path="/reset-password/:id/:token"
+              element={<ResetPassword />}
+            />
             {/* <Route path="/test" element={<Test />} /> */}
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />

@@ -12,6 +12,8 @@ import {
   Fade,
   Typography,
   Button,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,8 +28,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import LockResetIcon from "@mui/icons-material/LockReset";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const ModalTable = ({ childrenData, parent }) => {
   const modalColumns = [
@@ -124,7 +129,6 @@ const PaymentModalTable = ({ childrenData, parent }) => {
         // p: 4,
       }}
     >
-      <button onClick={() => console.log(childrenData)}>cc</button>
       <Box
         // m="40px 0 0 0"
         // height="75vh"
@@ -172,6 +176,132 @@ const PaymentModalTable = ({ childrenData, parent }) => {
   );
 };
 
+const ResetPasswordModal = ({ id, setresetModalState }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const [password, setpassword] = useState("");
+  const [confirmPass, setconfirmPass] = useState("");
+
+  const [showPass, setshowPass] = useState(false);
+  const [showConfirmPass, setshowConfirmPass] = useState("");
+
+  const handleClickShowPassword = () => setshowPass((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setshowConfirmPass((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleReset = () => {
+    let token = localStorage.getItem("token");
+    axios
+      .post(
+        `${BASE_URL}/adminResetPasswordParent`,
+        {
+          id: id,
+          password: password,
+        },
+        {
+          headers: {
+            Authorization: `token ${JSON.parse(token)}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+
+        setresetModalState(false);
+      })
+      .catch((e) => {
+        console.log(`reset error ${e}`);
+      });
+  };
+
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "75%",
+        bgcolor: "background.paper",
+        border: "2px solid #000",
+        boxShadow: 24,
+        // p: 4,
+      }}
+    >
+      <Box
+        // m="40px 0 0 0"
+        // height="75vh"
+        sx={{
+          padding: "50px",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ textAlign: "center", marginBottom: "20px" }}
+        >
+          Reset Password
+        </Typography>
+        <TextField
+          fullWidth
+          variant="filled"
+          type={showPass ? "text" : "password"}
+          label="Password"
+          value={password}
+          name="assigneePass"
+          sx={{
+            "& .MuiInputLabel-root": {
+              color: colors.primary[100],
+            },
+            "& .MuiInput-underline": {
+              borderBottomColor: colors.primary[100],
+            },
+            "& .MuiInput-label": {
+              color: "#f00",
+            },
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPass ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          onChange={(e) => setpassword(e.target.value)}
+          style={{ marginBottom: "20px" }}
+        />
+
+        <Box
+          display="flex"
+          justifyContent="center"
+          mt="20px"
+          sx={{ width: "100%" }}
+        >
+          <Button
+            onClick={handleReset}
+            type="submit"
+            color="secondary"
+            variant="contained"
+          >
+            Reset
+          </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 const Parents = () => {
   const dispatch = useDispatch();
   const [childrenData, setchildrenData] = useState([]);
@@ -179,6 +309,8 @@ const Parents = () => {
   const [parentName, setparentName] = useState("");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [parentId, setparentId] = useState("");
 
   useEffect(() => {
     dispatch(getAssignor());
@@ -225,6 +357,20 @@ const Parents = () => {
         </IconButton>
       ),
     },
+    {
+      title: "Reset Password",
+      render: (rowData) => (
+        <IconButton
+          onClick={() => {
+            setresetModalState(true);
+            setparentId(rowData.id);
+            console.log(rowData.id);
+          }}
+        >
+          <LockResetIcon />
+        </IconButton>
+      ),
+    },
   ];
 
   const navigate = useNavigate();
@@ -234,6 +380,7 @@ const Parents = () => {
 
   const [modalState, setmodalState] = useState(false);
   const [paymentModalState, setpaymentModalState] = useState(false);
+  const [resetModalState, setresetModalState] = useState(false);
 
   const [deleted, setdeleted] = useState(false);
 
@@ -279,6 +426,12 @@ const Parents = () => {
         onClose={() => setpaymentModalState(false)}
       >
         <PaymentModalTable childrenData={paymentData} parent={parentName} />
+      </Modal>
+      <Modal open={resetModalState} onClose={() => setresetModalState(false)}>
+        <ResetPasswordModal
+          id={parentId}
+          setresetModalState={setresetModalState}
+        />
       </Modal>
       <Box
         m="40px 0 0 0"
