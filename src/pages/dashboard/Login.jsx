@@ -73,15 +73,19 @@ const Login = () => {
   };
 
   const [value, setValue] = useState(false);
+  const [confirmation, setconfirmation] = useState(false);
 
   const OnSubmit = () => {
     axios
-      .get(`${BASE_URL}/api/admin/ForgetPasswordEmail`, {})
+      .post(`${BASE_URL}/ForgetPasswordEmail`, {})
       .then((res) => {
         console.log(res.data);
+        setValue(false);
+        setconfirmation(true);
       })
       .catch((e) => {
         console.log(`error ${e}`);
+        setValue(false);
       });
   };
 
@@ -409,6 +413,63 @@ const Login = () => {
                               onClick={() => setValue(false)}
                             >
                               No
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                        <Dialog
+                          open={confirmation}
+                          onClose={() => setconfirmation(false)}
+                          PaperProps={{
+                            sx: {
+                              width: "22.5%",
+                              height: "30%",
+                            },
+                          }}
+                        >
+                          <DialogTitle
+                            sx={{
+                              textAlign: "center",
+                              fontWeight: "bold",
+                              paddingBottom: "5px",
+                              flexDirection: "row",
+                            }}
+                          >
+                            {/* <DoneIcon
+                sx={{ color: "green", height: "25px", width: "25px" }}
+              /> */}
+                            Confirmation
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText sx={{ textAlign: "center" }}>
+                              An email has been sent to your email address.
+                              Please check your email
+                            </DialogContentText>
+                          </DialogContent>
+
+                          <DialogActions
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Button
+                              sx={{
+                                backgroundColor: "green",
+                                color: "white",
+                                "&:hover": {
+                                  backgroundColor: "#329932",
+                                },
+                                width: "60%",
+                                borderRadius: "18px",
+                                marginBottom: "15px",
+                              }}
+                              onClick={() => {
+                                setconfirmation(false);
+                                navigate("/login");
+                              }}
+                            >
+                              Okay
                             </Button>
                           </DialogActions>
                         </Dialog>

@@ -17,6 +17,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
@@ -49,6 +51,7 @@ const ResetPassword = () => {
   const dispatch = useDispatch();
 
   const [loading, setloading] = useState(false);
+  const [confirmation, setconfirmation] = useState(false);
 
   const [errorState, seterrorState] = useState(false);
   const { id, token } = useParams();
@@ -61,13 +64,13 @@ const ResetPassword = () => {
       seterrorState(true);
     } else {
       axios
-        .post(`${BASE_URL}/api/admin/reset-password/${id}/${token}`, {
+        .post(`${BASE_URL}/reset-password/${id}/${token}`, {
           password: values.password,
           confirmPassword: values.confirmPassword,
         })
         .then((res) => {
           console.log(res.data);
-
+          setconfirmation(true);
           setloading(false);
         })
         .catch((e) => {
@@ -95,6 +98,15 @@ const ResetPassword = () => {
 
   return (
     <ThemeProvider theme={themeP}>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         sx={{
           // backgroundImage: `url(${bgImage})`,
@@ -344,6 +356,63 @@ const ResetPassword = () => {
                 </Box>
               </Box>
             </Grid>
+
+            <Dialog
+              open={confirmation}
+              onClose={() => setconfirmation(false)}
+              PaperProps={{
+                sx: {
+                  width: "22.5%",
+                  height: "30%",
+                },
+              }}
+            >
+              <DialogTitle
+                sx={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  paddingBottom: "5px",
+                  flexDirection: "row",
+                }}
+              >
+                {/* <DoneIcon
+                sx={{ color: "green", height: "25px", width: "25px" }}
+              /> */}
+                Confirmation
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText sx={{ textAlign: "center" }}>
+                  Your password has been reset successfully.
+                </DialogContentText>
+              </DialogContent>
+
+              <DialogActions
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  sx={{
+                    backgroundColor: "green",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#329932",
+                    },
+                    width: "60%",
+                    borderRadius: "18px",
+                    marginBottom: "15px",
+                  }}
+                  onClick={() => {
+                    setconfirmation(false);
+                    navigate("/login");
+                  }}
+                >
+                  Okay
+                </Button>
+              </DialogActions>
+            </Dialog>
 
             <Grid xs={0} sm={0} md={6} lg={6} xl={6} minHeight={550}>
               <Box
