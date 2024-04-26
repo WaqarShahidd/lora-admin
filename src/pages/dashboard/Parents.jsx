@@ -110,7 +110,9 @@ const PaymentModalTable = ({ childrenData, parent }) => {
     {
       title: "Expiry",
       field: "expiry",
-      render: (rowData) => moment(rowData).format("DD/MM/YYYY"),
+      render: (rowData) => (
+        <Typography>{moment(rowData.expiry).format("DD/MM/YYYY")}</Typography>
+      ),
     },
   ];
   const theme = useTheme();
@@ -163,7 +165,7 @@ const PaymentModalTable = ({ childrenData, parent }) => {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
         <MaterialTable
-          title={`${parent}'s Assignees`}
+          title={`${parent}'s Billing History`}
           data={
             childrenData
               ? Object.values(childrenData)?.map((val) => ({ ...val }))
@@ -318,6 +320,8 @@ const Parents = () => {
 
   const { assignor, getLoading } = useSelector((state) => state.assignor);
 
+  const [expiryDate, setexpiryDate] = useState("");
+
   const columns = [
     { title: "ID", field: "id", editable: false },
     { title: "Full Name", field: "name" },
@@ -326,8 +330,25 @@ const Parents = () => {
     {
       title: "Expiry Date",
       field: "expiryDate",
-      render: (rowData) => moment(rowData).format("DD/MM/YYYY"),
-      editable: false,
+      render: (rowData) => (
+        <Typography>
+          {moment(rowData.expiryDate).format("DD/MM/YYYY")}
+        </Typography>
+      ),
+      editComponent: (props) => (
+        <input
+          type="date"
+          value={moment(props.value).format("YYYY-MM-DD")}
+          onChange={(e) => props.onChange(e.target.value)}
+          style={{
+            backgroundColor: "transparent",
+            height: "50px",
+            borderRadius: "8px",
+            padding: "10px",
+            border: "1px solid #565656",
+          }}
+        />
+      ),
     },
     {
       title: "Children",
@@ -477,12 +498,13 @@ const Parents = () => {
             onRowDelete: handleDeleteRow,
             onRowUpdate: (updatedRow, oldRow) =>
               new Promise((resolve, reject) => {
-                console.log(updatedRow);
                 dispatch(
                   updateAssignor(
                     updatedRow.id,
                     updatedRow.name,
-                    updatedRow.email
+                    updatedRow.email,
+                    updatedRow.image,
+                    updatedRow.expiryDate
                   )
                 );
                 setTimeout(() => {

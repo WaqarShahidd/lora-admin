@@ -47,7 +47,7 @@ export const clearSuccAss = () => async (dispatch) => {
 };
 
 export const updateAssignor =
-  (id = "", name = "", email = "", image = "") =>
+  (id = "", name = "", email = "", image = "", expiryDate) =>
   async (dispatch) => {
     let token = localStorage.getItem("token");
     try {
@@ -61,6 +61,7 @@ export const updateAssignor =
           name: name,
           email: email,
           image: image,
+          expiryDate: expiryDate,
         },
         {
           headers: {
